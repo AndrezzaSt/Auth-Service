@@ -2,20 +2,28 @@ package com.example.AuthService.Entities;
 
 import com.example.AuthService.domain.TipoUsuario;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
     private String Usuario;
     private String Senha;
     private TipoUsuario tipo;
-    private String id;
+
 
     public User(){
     }
 
-    public User(String usuario, String senha, TipoUsuario tipo, String id) {
+    public User(String usuario, String senha, TipoUsuario tipo) {
         Usuario = usuario;
         Senha = senha;
         this.tipo = tipo;
-        this.id = id;
     }
 
     public String getUsuario() {
@@ -42,11 +50,7 @@ public class User {
         this.tipo = tipo;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 }

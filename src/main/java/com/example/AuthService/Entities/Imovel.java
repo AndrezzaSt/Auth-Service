@@ -1,11 +1,24 @@
 package com.example.AuthService.Entities;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Imovel {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long Id;
     private String nome;
     private String tipo;
     private String cidade;
     private String preco;
     private boolean disponibilidade;
+
+    public Imovel() {
+    }
 
     public Imovel(String nome, String tipo, String cidade, String preço, boolean disponibilidade) {
         this.nome = nome;
@@ -53,5 +66,9 @@ public class Imovel {
 
     public void setDisponibilidade(boolean disponibilidade) {
         this.disponibilidade = disponibilidade;
+    }
+
+    public Long getId() {
+        return Id;
     }
 }

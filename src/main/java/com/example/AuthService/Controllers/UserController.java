@@ -14,30 +14,36 @@ public class UserController {
     public static boolean locadorLogado = false;
     @Autowired
     UserService usuarioService;
+
     @PostMapping
-    public void cadastro(@RequestBody User usuario){
+    public void cadastro(@RequestBody User usuario) {
         usuarioService.cadastraUsuario(usuario);
     }
+
     @PostMapping("/login/{user}/{senha}")
-    public String login(@PathVariable String user,@PathVariable String senha){
-        return usuarioService.valida(user,senha);
+    public String login(@PathVariable String user, @PathVariable String senha) {
+        return usuarioService.valida(user, senha);
 
 
     }
+
     @GetMapping("/iniciar")
-    public void iniciar(){
+    public void iniciar() {
         usuarioService.iniciar();
     }
+
     @GetMapping
-    public List buscaTodos(){
+    public List buscaTodos() {
         return usuarioService.busca();
     }
-    @GetMapping("/{user}")
-    public User buscaUsuario(@PathVariable String user){
-        return usuarioService.buscaUsuario(user);
+
+    @GetMapping("/{id}")
+    public User buscaUsuario(@PathVariable("id") Long id) {
+        return usuarioService.buscaUsuario(id).stream().findFirst().orElseThrow();
     }
+
     @DeleteMapping("/{user}")
-    public void delete(@PathVariable String user){
+    public void delete(@PathVariable("user") User user) {
         usuarioService.delete(user);
     }
 }

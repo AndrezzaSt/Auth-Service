@@ -2,47 +2,40 @@ package com.example.AuthService.services;
 
 import com.example.AuthService.Entities.User;
 import com.example.AuthService.domain.TipoUsuario;
+import com.example.AuthService.interfaces.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
-    ArrayList<User> listaUsuarios = new ArrayList<>();
+
+    @Autowired
+    private UserRepository repo;
+
     public void iniciar(){
-        listaUsuarios.add(new User("locador","123",TipoUsuario.LOCADOR, "1"));
-        listaUsuarios.add(new User("locatario","123",TipoUsuario.LOCATARIO, "2"));
+        repo.save(new User("locador","123",TipoUsuario.LOCADOR));
+        repo.save(new User("locatario","123",TipoUsuario.LOCATARIO));
     }
     public User cadastraUsuario(User usuario){
-        listaUsuarios.add(usuario);
+        repo.save(usuario);
         return usuario;
     }
     public List busca(){
-        return listaUsuarios;
+        return (List) repo.findAll();
     }
-    public User buscaUsuario(String user){
-        for(int i=0; i<listaUsuarios.size();i++){
-            if(listaUsuarios.get(i).getUsuario().equals(user))
-                return listaUsuarios.get(i);
-        }
-        return null;
+    public Optional<User> buscaUsuario(long Id){
+
+        return repo.findById(Id);
     }
-    public String delete(String user){
-        String resposta=null;
-        for(int i=0; i<listaUsuarios.size();i++){
-            if(listaUsuarios.get(i).getUsuario().equals(user)){
-                listaUsuarios.remove(i);
-                resposta="Removido com sucesso!!";
-            }else{
-                resposta="Usuario não encontrado!!";
-            }
-        }
-        return resposta;
+    public void delete(User user){
+        repo.delete(user);
     }
 
     public String valida(String user, String senha) {
-        User usuario= listaUsuarios.stream().filter(iterator->iterator.getUsuario().equals(user)).findFirst().get();
+        User usuario = repo.findAll().stream().filter(iterator->iterator.getUsuario().equals(user)).findFirst().get();
         if(usuario.getSenha().equals(senha)&& usuario.getTipo().equals(TipoUsuario.LOCADOR)){
             boolean locadorLogado = true;
             return "Locador Logado";
@@ -52,4 +45,6 @@ public class UserService {
         }
         return "Não logado";
     }
+
+
 }
